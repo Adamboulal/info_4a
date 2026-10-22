@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket 5 Quadrati</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      gap: 15px;
+    }
+
+    .square {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #333;
+      background-color: #fff;
+      transition: background-color 0.2s;
+    }
+
+    /* Classe usata per attivare il colore rosso */
+    .square.active {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+  </div>
+
+  <script>
+    const squares = document.querySelectorAll('.square');
+    
+    // Connessione al server WebSocket
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onmessage = (event) => {
+      const activeIndex = parseInt(event.data);
+
+      // Resetta tutti i quadrati a bianco
+      squares.forEach(square => square.classList.remove('active'));
+
+      // Attiva il quadrato inviato dal server
+      if (squares[activeIndex]) {
+        squares[activeIndex].classList.add('active');
+      }
+    };
+  </script>
+</body>
+</html>
